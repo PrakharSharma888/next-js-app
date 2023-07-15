@@ -7,7 +7,8 @@ import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function signupPage(){
-    toast('Hello World');
+    toast('Hello World', {duration: 4000,
+        position: 'top-center'});
     const router = useRouter();
 
     const [user, setUser] = useState({
@@ -28,7 +29,11 @@ export default function signupPage(){
 
     const onSignup = async () => {
         try {
-            
+            setLoading(true)
+            const response = await axios.post('/api/users/signup', user)
+            console.log("Signup sucessfull", response.data);
+            toast.success("Signup sucessfull")
+            router.push('/login')
         } catch (error: any) {
             toast.error(error)
         }finally{
@@ -45,7 +50,7 @@ export default function signupPage(){
             <input className="p-2 border border-gray-300 rounded-lg m-4 text-black" type="text" value={user.email} id="email" onChange={(e) => setUser({...user, email: e.target.value})} placeholder="ee mail kardo"/>
 
             <label htmlFor="password">Password : </label>
-            <input className="p-2 border border-gray-300 rounded-lg m-4 text-black" type="text" value={user.password} id="password" onChange={(e) => setUser({...user, password: e.target.value})} placeholder="shhhhhh"/>
+            <input className="p-2 border border-gray-300 rounded-lg m-4 text-black" type="password" value={user.password} id="password" onChange={(e) => setUser({...user, password: e.target.value})} placeholder="shhhhhh"/>
 
             <button className="p-2 border border-gray-300 rounded-lg m-4" onClick={onSignup}>{buttonDisabled ? "Pehle uper ka sabh bhar" : "Signup Karle le abh"}</button>
             <Link href="/login">To Login Click Here</Link>
