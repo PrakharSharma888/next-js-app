@@ -10,7 +10,7 @@ export async function POST(request: NextRequest){
     try {
         const reqBody = await request.json();
         const {username, password, email} = reqBody
-        console.log(reqBody);
+        console.log("The response from the signup page from user",reqBody);
 
         // check if user already exists
         const user = await User.findOne({email})
