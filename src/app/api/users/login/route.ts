@@ -12,9 +12,7 @@ export async function POST(request: NextRequest){
         console.log("hello?");
         const response = await request.json()
         const {email, password} = response
-        console.log("hello?1");
         console.log("The response from the login page from user", email, password);
-        console.log("hello?2");
         const user = await User.findOne({email})
         if(!user){
             return NextResponse.json({message: "User does not exists"}, {status: 400})
@@ -25,7 +23,9 @@ export async function POST(request: NextRequest){
             return NextResponse.json({message: "Wrong Password"}, {status: 400})
         }
         const userData = {
-            id: user._id
+            id: user._id,
+            username: user.username,
+            email: user.email
         }
         // creating a token for the user
         const token = await jwt.sign(userData ,process.env.SECRET_TOKEN!, {expiresIn: "1d"})
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest){
             success: true
         })
 
-        tokenResponse.cookies.set("Token", token, {httpOnly: true})
+        tokenResponse.cookies.set("token", token, {httpOnly: true})
 
         return tokenResponse
 
